@@ -21,7 +21,7 @@ $tableTitle.addClass("bg-primary text-light container")
 $('#train-table').prepend($tableTitle);
 
 $trainTable = $('<table>')
-$trainTable.addClass("table container")
+$trainTable.addClass("table container table-hover table-bordered")
 $thead = $('<thead>')
 $topRow = $('<tr>')
 
@@ -165,11 +165,20 @@ $($form).append($submitButton)
 
     var trainName = $('#formGroupInput1').val().trim();
     var destination = $('#formGroupInput2').val().trim();
-    var firstTrain = $('#formGroupInput3').val().trim();
-    var freq = $('#formGroupInput4').val().trim();
-    currentTime = 0615;
-    minutesAway = freq - ((currentTime - firstTrain) % freq)
-    nextArrival = currentTime + minutesAway
+    var firstTrain = $('#formGroupInput3').val();
+    var freq = ($('#formGroupInput4').val());
+    freq = parseInt(freq);
+    var time = 316;
+    time = parseInt(time)
+    firstTrain = parseInt(firstTrain) 
+    console.log(time)
+    console.log(firstTrain)
+    console.log(time - firstTrain)
+    console.log((time - firstTrain) % freq)
+    var minutesAway = freq - ((time - firstTrain) % freq)
+    console.log(minutesAway)
+    var nextArrival = time + minutesAway
+    console.log(time)
     
 
     var newTrain = {
@@ -196,6 +205,7 @@ database.ref().on("child_added", function(childSnapshot) {
     var nextArrival = childSnapshot.val().nextArrival;
     var minutesAway = childSnapshot.val().minutesAway;
 
+    // var nextArrivalPretty = moment(nextArrival).format('HH:mm')
     var $newRow = $('<tr>')
         $newtd1 = $('<td>')
         $newtd1.attr({
@@ -230,8 +240,8 @@ database.ref().on("child_added", function(childSnapshot) {
           scope: 'row'
         })
         $newtd4.append(
-          $('<td>').text($('<td>').text(nextArrival))
-        )
+          $('<td>').text(nextArrival))
+        
         $newRow.append($newtd4)
         
         
@@ -240,8 +250,8 @@ database.ref().on("child_added", function(childSnapshot) {
           scope: 'row'
         })
         $newtd5.append(
-          $('<td>').text($('<td>').text(minutesAway))
-        )
+          $('<td>').text(minutesAway))
+        
         $newRow.append($newtd5)
     $tableBody.append($newRow);
 });
