@@ -17,11 +17,11 @@ firebase.initializeApp(firebaseConfig);
 
 $tableTitle = $('<div>')
 $tableTitle.html('<h4>Current Train Schedule</h4>')
-$tableTitle.addClass("bg-primary text-light container")
+$tableTitle.addClass("bg-primary text-light container pt-1 pb-1 card ")
 $('#train-table').prepend($tableTitle);
 
 $trainTable = $('<table>')
-$trainTable.addClass("table container table-hover table-bordered")
+$trainTable.addClass("table container table-hover border border-primary")
 $thead = $('<thead>')
 $topRow = $('<tr>')
 
@@ -74,13 +74,20 @@ $($trainTable).append($tableBody)
 
 // form field
 // Train input field
-$form = $('<form>')
-$form.addClass("container")
+$formTitle = $('<div>')
+$formTitle.html("<h4>Add A Train</h4>")
+$formTitle.addClass("bg-primary text-light container pt-1 pb-1")
+$('#input-form').prepend($formTitle)
+
+$form = $('<form card>')
+$form.addClass("container border border-primary")
 $formdiv1 = $('<div>')
 $formdiv1.addClass("form-group")
+
 $label1 = $('<label>')
 $label1.text('Train Name')
 $label1.attr({
+  class: "p-1",
   for: "formGroupInput1"
 })
 $input1 = $('<input>')
@@ -117,7 +124,7 @@ $label3.attr({
 })
 $input3 = $('<input>')
 $input3.attr({
-  type: "number",
+  type: "text",
   class: "form-control",
   id: "formGroupInput3"
 })
@@ -165,28 +172,14 @@ $($form).append($submitButton)
 
     var trainName = $('#formGroupInput1').val().trim();
     var destination = $('#formGroupInput2').val().trim();
-    var firstTrain = $('#formGroupInput3').val();
+    var firstTrain = $('#formGroupInput3').val().trim();
     var freq = ($('#formGroupInput4').val());
-    freq = parseInt(freq);
-    var time = 316;
-    time = parseInt(time)
-    firstTrain = parseInt(firstTrain) 
-    console.log(time)
-    console.log(firstTrain)
-    console.log(time - firstTrain)
-    console.log((time - firstTrain) % freq)
-    var minutesAway = freq - ((time - firstTrain) % freq)
-    console.log(minutesAway)
-    var nextArrival = time + minutesAway
-    console.log(time)
-    
 
     var newTrain = {
       name: trainName,
       destination: destination,
       freq: freq,
-      nextArrival: nextArrival,
-      minutesAway: minutesAway
+      firstTrain: firstTrain
     }
 
     database.ref().push(newTrain)
@@ -202,8 +195,15 @@ database.ref().on("child_added", function(childSnapshot) {
     var trainName = childSnapshot.val().name;
     var destination = childSnapshot.val().destination;
     var freq = childSnapshot.val().freq;
-    var nextArrival = childSnapshot.val().nextArrival;
-    var minutesAway = childSnapshot.val().minutesAway;
+    var firstTrain = childSnapshot.val().firstTrain;
+    var firstTrainConverted = moment(firstTrain, "HH:mm").subtract(1, "years");
+    var currentTime = moment();
+    var diffTime = moment().diff(moment(firstTrainConverted), "minutes")
+    var tRemainder = diffTime % freq
+    var minutesAway = freq - tRemainder;
+    var nextArrival = currentTime.add(minutesAway, "minutes")
+
+
 
     // var nextArrivalPretty = moment(nextArrival).format('HH:mm')
     var $newRow = $('<tr>')
@@ -240,7 +240,7 @@ database.ref().on("child_added", function(childSnapshot) {
           scope: 'row'
         })
         $newtd4.append(
-          $('<td>').text(nextArrival))
+          $('<td>').html(moment(nextArrival).format("HH:mm")))
         
         $newRow.append($newtd4)
         
