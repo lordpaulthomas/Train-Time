@@ -94,7 +94,8 @@ $input1 = $('<input>')
 $input1.attr({
   type: "text",
   class: "form-control",
-  id: "formGroupInput1"
+  id: "formGroupInput1",
+  placeholder: "E.g. Richmond Train"
 })
 $('#input-form').append($form.append($formdiv1.append($label1).append($input1)))
 
@@ -110,7 +111,8 @@ $input2 = $('<input>')
 $input2.attr({
   type: "text",
   class: "form-control",
-  id: "formGroupInput2"
+  id: "formGroupInput2",
+  placeholder: "E.g. Richmond"
 })
 $('#input-form').append($form.append($formdiv2.append($label2).append($input2)))
 
@@ -118,15 +120,16 @@ $('#input-form').append($form.append($formdiv2.append($label2).append($input2)))
 $formdiv3 = $('<div>')
 $formdiv3.addClass("form-group")
 $label3 = $('<label>')
-$label3.text('First Train Time (HH:mm - military time)')
+$label3.text('First Train Time')
 $label3.attr({
   for: "formGroupInput3"
 })
 $input3 = $('<input>')
 $input3.attr({
-  type: "text",
+  type: "time",
   class: "form-control",
-  id: "formGroupInput3"
+  id: "formGroupInput3",
+  placeholder: '05:00'
 })
 $('#input-form').append($form.append($formdiv3.append($label3).append($input3)))
 
@@ -143,7 +146,8 @@ $input4 = $('<input>')
 $input4.attr({
   type: "number",
   class: "form-control",
-  id: "formGroupInput4"
+  id: "formGroupInput4",
+  placeholder: "E.g. 25"
 })
 $('#input-form').append($form.append($formdiv4.append($label4).append($input4)))
 
@@ -152,7 +156,7 @@ $submitButton = $('<button>')
 $submitButton.attr({
   type: "submit",
   class: "btn btn-primary",
-  id: "submit",
+  id: "submit"
 })
 $submitButton.text("Submit")
 $($form).append($submitButton)
